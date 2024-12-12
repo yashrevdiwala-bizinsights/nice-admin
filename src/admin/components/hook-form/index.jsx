@@ -25,7 +25,7 @@ const HookForm = ({ id }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ mode: "onChange" })
+  } = useForm()
 
   const imageUpload = (e) => {
     const file = e.target.files[0]

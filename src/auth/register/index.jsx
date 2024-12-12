@@ -1,11 +1,10 @@
-// import { Link } from "react-router"
+import SignupForm from "../components/signupForm"
 import useDocumentTitle from "../../components/useDocumentTitle"
-import Form from "../components/form"
 
 const Register = () => {
   useDocumentTitle("Nice Admin - Register")
 
-  return <Form tab="register" />
+  return <SignupForm />
 }
 
 export default Register

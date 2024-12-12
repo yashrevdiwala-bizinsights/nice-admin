@@ -1,5 +1,17 @@
 const validationRules = {}
 
+validationRules.username = {
+  required: { value: true, message: "Username is required" },
+  minLength: {
+    value: 3,
+    message: "Username too short",
+  },
+  maxLength: {
+    value: 15,
+    message: "Username too long",
+  },
+}
+
 validationRules.name = {
   required: { value: true, message: "Name is required" },
   minLength: {

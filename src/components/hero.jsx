@@ -49,7 +49,7 @@ const Hero = ({ toggleSidebar, activeTab }) => {
             </Link>
           </li>
 
-          <li className="nav-item dropdown">
+          {/* <li className="nav-item dropdown">
             <a
               className={
                 dropdownActive === "notification"
@@ -152,9 +152,9 @@ const Hero = ({ toggleSidebar, activeTab }) => {
                 <a href="#">Show all notifications</a>
               </li>
             </ul>
-          </li>
+          </li> */}
 
-          <li className="nav-item dropdown">
+          {/* <li className="nav-item dropdown">
             <a
               className={
                 dropdownActive === "message"
@@ -269,15 +269,11 @@ const Hero = ({ toggleSidebar, activeTab }) => {
                 <a href="#">Show all messages</a>
               </li>
             </ul>
-          </li>
+          </li> */}
 
           <li className="nav-item dropdown pe-3">
             <a
-              className={
-                dropdownActive === "profile"
-                  ? "nav-link nav-profile d-flex align-items-center show pe-0"
-                  : "nav-link nav-profile d-flex align-items-center pe-0"
-              }
+              className={`nav-link nav-profile d-flex align-items-center pe-0 ${dropdownActive === "profile" ? "show" : ""}`}
               href="#"
               data-bs-toggle="dropdown"
               aria-expanded={dropdownActive === "profile" ? true : false}
@@ -294,11 +290,7 @@ const Hero = ({ toggleSidebar, activeTab }) => {
             </a>
 
             <ul
-              className={
-                dropdownActive === "profile"
-                  ? "dropdown-menu dropdown-menu-end dropdown-menu-arrow profile show"
-                  : "dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
-              }
+              className={`dropdown-menu dropdown-menu-end dropdown-menu-arrow profile ${dropdownActive === "profile" ? "show" : ""}`}
               style={
                 dropdownActive === "profile"
                   ? {
