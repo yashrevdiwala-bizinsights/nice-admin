@@ -20,12 +20,13 @@ const HookForm = ({ id }) => {
   const formData = new FormData()
   const user = userData.find((user) => user.id == id)
   const [image, setImage] = useState(user?.image || "")
-
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm()
+  const salary = watch("salary", id ? user.salary : 10000)
 
   const imageUpload = (e) => {
     const file = e.target.files[0]
@@ -160,7 +161,8 @@ const HookForm = ({ id }) => {
                 type="radio"
                 name="gender"
                 id="male"
-                defaultValue="male"
+                value="male"
+                defaultChecked={user?.gender === "male"}
                 {...register("gender", validationRules.gender)}
               />
               <Label className="form-check-label" htmlFor="male">
@@ -173,7 +175,8 @@ const HookForm = ({ id }) => {
                 type="radio"
                 name="gender"
                 id="female"
-                defaultValue="female"
+                value="female"
+                defaultChecked={user?.gender === "female"}
                 {...register("gender", validationRules.gender)}
               />
               <Label className="form-check-label" htmlFor="female">
@@ -273,7 +276,7 @@ const HookForm = ({ id }) => {
         <div className="form-floating">
           <div>
             <Label htmlFor="customRange1" className="form-label">
-              Salary : {id && user.salary}
+              Salary : {salary}
             </Label>
             <Input
               type="range"
@@ -283,10 +286,7 @@ const HookForm = ({ id }) => {
               className="form-range"
               id="customRange1"
               name="salary"
-              defaultValue={id && user.salary}
-              onChange={(e) => {
-                user.salary = e.target.value
-              }}
+              defaultValue={id ? user.salary : 10000}
               {...register("salary", validationRules.salary)}
             />
           </div>

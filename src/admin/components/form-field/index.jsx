@@ -2,9 +2,13 @@
 
 import React from "react"
 
-const Label = ({ children, ...props }) => {
-  return <label {...props}>{children}</label>
-}
+const Label = React.forwardRef(({ children, ...props }, ref) => (
+  <label ref={ref} {...props}>
+    {children}
+  </label>
+))
+
+Label.displayName = "Label"
 
 const Input = React.forwardRef(({ className, ...props }, ref) => (
   <input className={className} ref={ref} {...props} />
