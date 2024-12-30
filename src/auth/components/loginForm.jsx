@@ -1,20 +1,28 @@
+import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router"
 import { useForm } from "react-hook-form"
+import db from "@/config/db"
+import { validationRules } from "@/config/validationRules"
+import { setAdminId } from "@/features/adminSlice"
 import ErrorMessage from "@/admin/components/error-message"
 import { Input, Label } from "@/admin/components/form-field"
-import { validationRules } from "@/config/validationRules"
 
 const LoginForm = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm()
 
-  const onSubmit = (data) => {
-    console.log(data)
-    navigate("/admin")
+  const onSubmit = async (data) => {
+    const result = await db.admin.login(data)
+    if (result.data.status === 200) {
+      localStorage.setItem("re_d1", result.data.id)
+      dispatch(setAdminId(result.data.id))
+      navigate("/")
+    }
   }
 
   return (
@@ -71,6 +79,7 @@ const LoginForm = () => {
                           <ErrorMessage errorMsg="Invalid Username" />
                         )}
                       </div>
+
                       <div className="col-12">
                         <Label htmlFor="yourPassword" className="form-label">
                           Password
@@ -86,23 +95,7 @@ const LoginForm = () => {
                           <ErrorMessage errorMsg="Invalid Password" />
                         )}
                       </div>
-                      <div className="col-12">
-                        <div className="form-check">
-                          <Input
-                            className="form-check-input"
-                            type="checkbox"
-                            name="remember"
-                            defaultValue="true"
-                            id="rememberMe"
-                          />
-                          <Label
-                            className="form-check-label"
-                            htmlFor="rememberMe"
-                          >
-                            Remember me
-                          </Label>
-                        </div>
-                      </div>
+
                       <div className="col-12">
                         <button className="btn btn-primary w-100" type="submit">
                           Login

@@ -6,6 +6,8 @@ import Contact from "../admin/contact"
 import UsersList from "../admin/users/users-list"
 import Users from "../admin/users"
 import UsersLayout from "../Layout/users-layout"
+import Attributes from "@/admin/attributes"
+import AttributesDetails from "@/admin/attributes-details"
 
 const adminRoutesConfig = {
   path: "/admin",
@@ -48,6 +50,14 @@ const adminRoutesConfig = {
           element: <Users />,
         },
       ],
+    },
+    {
+      path: "attributes",
+      element: <Attributes />,
+    },
+    {
+      path: "attributes-details",
+      element: <AttributesDetails />,
     },
   ],
 }

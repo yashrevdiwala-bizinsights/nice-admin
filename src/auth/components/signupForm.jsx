@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router"
 import { useForm } from "react-hook-form"
 import ErrorMessage from "@/admin/components/error-message"
 import { Input, Label } from "@/admin/components/form-field"
+import db from "@/config/db"
 import { validationRules } from "@/config/validationRules"
 
 const SignupForm = () => {
@@ -12,9 +13,10 @@ const SignupForm = () => {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = (data) => {
-    console.log(data)
-    navigate("/admin")
+  const onSubmit = async (data) => {
+    const results = await db.admin.create(data)
+
+    results.data.status === 200 ? navigate("/") : console.log("Error")
   }
 
   return (

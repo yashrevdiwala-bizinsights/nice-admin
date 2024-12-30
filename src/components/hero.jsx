@@ -1,9 +1,26 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 import { Link } from "react-router"
+import db from "@/config/db"
+import CheckAuth from "@/config/checkAuth"
 
 const Hero = ({ toggleSidebar, activeTab }) => {
+  const { id } = useSelector((state) => state.admin)
+  CheckAuth(id)
+
   const [dropdownActive, setDropdownActive] = useState("")
+  const [user, setUser] = useState({})
+
+  const fetchData = async () => {
+    const result = await db.admin.userProfile({ admin_id: id })
+    setUser(result.data.data)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   useEffect(() => {
     setDropdownActive("")
@@ -23,24 +40,6 @@ const Hero = ({ toggleSidebar, activeTab }) => {
         <i className="bi bi-list toggle-sidebar-btn" onClick={toggleSidebar} />
       </div>
 
-      {/* <div className="search-bar">
-        <form
-          className="search-form d-flex align-items-center"
-          method="POST"
-          action="#"
-        >
-          <input
-            type="text"
-            name="query"
-            placeholder="Search"
-            title="Enter search keyword"
-          />
-          <button type="submit" title="Search">
-            <i className="bi bi-search"></i>
-          </button>
-        </form>
-      </div> */}
-
       <nav className="header-nav ms-auto">
         <ul className="d-flex align-items-center">
           <li className="nav-item d-block d-lg-none">
@@ -48,228 +47,6 @@ const Hero = ({ toggleSidebar, activeTab }) => {
               <i className="bi bi-search"></i>
             </Link>
           </li>
-
-          {/* <li className="nav-item dropdown">
-            <a
-              className={
-                dropdownActive === "notification"
-                  ? "nav-link nav-icon show"
-                  : "nav-link nav-icon"
-              }
-              href="#"
-              data-bs-toggle="dropdown"
-              aria-expanded={dropdownActive === "notification" ? true : false}
-              onClick={() => toggleDropdown("notification")}
-            >
-              <i className="bi bi-bell"></i>
-              <span className="badge bg-primary badge-number">4</span>
-            </a>
-
-            <ul
-              className={
-                dropdownActive === "notification"
-                  ? "dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications show"
-                  : "dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
-              }
-              style={
-                dropdownActive === "notification"
-                  ? {
-                      position: "absolute",
-                      inset: "0px 0px auto auto",
-                      margin: "0px",
-                      transform: "translate(-25px, 35px)",
-                    }
-                  : {}
-              }
-              data-popper-placement={
-                dropdownActive === "notification" ? "bottom-end" : undefined
-              }
-            >
-              <li className="dropdown-header">
-                You have 4 new notifications
-                <a href="#">
-                  <span className="badge rounded-pill bg-primary ms-2 p-2">
-                    View all
-                  </span>
-                </a>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-
-              <li className="notification-item">
-                <i className="bi bi-exclamation-circle text-warning"></i>
-                <div>
-                  <h4>Lorem Ipsum</h4>
-                  <p>Quae dolorem earum veritatis oditseno</p>
-                  <p>30 min. ago</p>
-                </div>
-              </li>
-
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-
-              <li className="notification-item">
-                <i className="bi bi-x-circle text-danger"></i>
-                <div>
-                  <h4>Atque rerum nesciunt</h4>
-                  <p>Quae dolorem earum veritatis oditseno</p>
-                  <p>1 hr. ago</p>
-                </div>
-              </li>
-
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-
-              <li className="notification-item">
-                <i className="bi bi-check-circle text-success"></i>
-                <div>
-                  <h4>Sit rerum fuga</h4>
-                  <p>Quae dolorem earum veritatis oditseno</p>
-                  <p>2 hrs. ago</p>
-                </div>
-              </li>
-
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-
-              <li className="notification-item">
-                <i className="bi bi-info-circle text-primary"></i>
-                <div>
-                  <h4>Dicta reprehenderit</h4>
-                  <p>Quae dolorem earum veritatis oditseno</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </li>
-
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li className="dropdown-footer">
-                <a href="#">Show all notifications</a>
-              </li>
-            </ul>
-          </li> */}
-
-          {/* <li className="nav-item dropdown">
-            <a
-              className={
-                dropdownActive === "message"
-                  ? "nav-link nav-icon show"
-                  : "nav-link nav-icon"
-              }
-              href="#"
-              data-bs-toggle="dropdown"
-              aria-expanded={dropdownActive === "message" ? true : false}
-              onClick={() => toggleDropdown("message")}
-            >
-              <i className="bi bi-chat-left-text"></i>
-              <span className="badge bg-success badge-number">3</span>
-            </a>
-
-            <ul
-              className={
-                dropdownActive === "message"
-                  ? "dropdown-menu dropdown-menu-end dropdown-menu-arrow messages show"
-                  : "dropdown-menu dropdown-menu-end dropdown-menu-arrow messages"
-              }
-              style={
-                dropdownActive === "message"
-                  ? {
-                      position: "absolute",
-                      inset: "0px 0px auto auto",
-                      margin: "0px",
-                      transform: "translate(-25px, 35px)",
-                    }
-                  : {}
-              }
-              data-popper-placement={
-                dropdownActive === "message" ? "bottom-end" : undefined
-              }
-            >
-              <li className="dropdown-header">
-                You have 3 new messages
-                <a href="#">
-                  <span className="badge rounded-pill bg-primary ms-2 p-2">
-                    View all
-                  </span>
-                </a>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-
-              <li className="message-item">
-                <a href="#">
-                  <img
-                    src="/assets/img/messages-1.jpg"
-                    alt=""
-                    className="rounded-circle"
-                  />
-                  <div>
-                    <h4>Maria Hudson</h4>
-                    <p>
-                      Velit asperiores et ducimus soluta repudiandae labore
-                      officia est ut...
-                    </p>
-                    <p>4 hrs. ago</p>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-
-              <li className="message-item">
-                <a href="#">
-                  <img
-                    src="/assets/img/messages-2.jpg"
-                    alt=""
-                    className="rounded-circle"
-                  />
-                  <div>
-                    <h4>Anna Nelson</h4>
-                    <p>
-                      Velit asperiores et ducimus soluta repudiandae labore
-                      officia est ut...
-                    </p>
-                    <p>6 hrs. ago</p>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-
-              <li className="message-item">
-                <a href="#">
-                  <img
-                    src="/assets/img/messages-3.jpg"
-                    alt=""
-                    className="rounded-circle"
-                  />
-                  <div>
-                    <h4>David Muldon</h4>
-                    <p>
-                      Velit asperiores et ducimus soluta repudiandae labore
-                      officia est ut...
-                    </p>
-                    <p>8 hrs. ago</p>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-
-              <li className="dropdown-footer">
-                <a href="#">Show all messages</a>
-              </li>
-            </ul>
-          </li> */}
 
           <li className="nav-item dropdown pe-3">
             <a
@@ -285,7 +62,7 @@ const Hero = ({ toggleSidebar, activeTab }) => {
                 className="rounded-circle"
               />
               <span className="d-none d-md-block dropdown-toggle ps-2">
-                K. Anderson
+                {user?.username || "Admin"}
               </span>
             </a>
 
@@ -306,7 +83,7 @@ const Hero = ({ toggleSidebar, activeTab }) => {
               }
             >
               <li className="dropdown-header">
-                <h6>Kevin Anderson</h6>
+                <h6>{user?.name || "Admin"}</h6>
                 <span>Web Designer</span>
               </li>
               <li>
@@ -355,7 +132,7 @@ const Hero = ({ toggleSidebar, activeTab }) => {
               <li>
                 <Link
                   className="dropdown-item d-flex align-items-center"
-                  to="/login"
+                  to="/logout"
                 >
                   <i className="bi bi-box-arrow-right"></i>
                   <span>Sign Out</span>

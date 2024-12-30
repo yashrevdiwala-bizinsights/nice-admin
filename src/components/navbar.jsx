@@ -69,14 +69,21 @@ const Navbar = ({ activeTab }) => {
           </Link>
         </li>
 
-        {/* <li className="nav-item">
-          <Link className="nav-link collapsed" to="/register">
+        <li className="nav-item">
+          <Link className="nav-link collapsed" to="/admin/attributes">
             <i className="bi bi-person-vcard-fill"></i>
-            <span>Register</span>
+            <span>Attributes</span>
           </Link>
         </li>
 
         <li className="nav-item">
+          <Link className="nav-link collapsed" to="/admin/attributes-details">
+            <i className="bi bi-person-vcard-fill"></i>
+            <span>Attributes Details</span>
+          </Link>
+        </li>
+
+        {/* <li className="nav-item">
           <Link className="nav-link collapsed" to="/login">
             <i className="bi bi-box-arrow-in-right"></i>
             <span>Login</span>
