@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useForm } from "react-hook-form"
 import db from "@/config/db"
-import CheckAuth from "@/config/checkAuth"
 import useDocumentTitle from "../../components/useDocumentTitle"
 import { Breadcrumb } from "../components/breadcrumb"
 import { Button, Input, Label, TextArea } from "../components/form-field"
@@ -15,7 +14,6 @@ const Profile = () => {
   useDocumentTitle("Nice Admin - Profile")
 
   const { id } = useSelector((state) => state.admin)
-  CheckAuth(id)
 
   const [user, setUser] = useState({})
 
