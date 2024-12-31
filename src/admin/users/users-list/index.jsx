@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router"
-import { userData } from "../users-data"
+import db from "@/config/db"
 import { Breadcrumb } from "../../components/breadcrumb"
 import UserTable from "../../components/user-table"
 import { Input, Label } from "../../components/form-field"
@@ -8,19 +8,25 @@ import useDocumentTitle from "../../../components/useDocumentTitle"
 
 const UsersList = () => {
   useDocumentTitle("Nice Admin - All Users")
-  const [filteredData, setfilteredData] = useState(userData)
+
+  const [filteredData, setfilteredData] = useState([])
   const navigate = useNavigate()
   const [searchParams] = useSearchParams({})
-
   const search = searchParams.get("search") || ""
 
-  useEffect(() => {
-    const filterResult = userData.filter((user) => {
-      return user.name.toLowerCase().includes(search.toLowerCase())
-    })
+  const fetchData = async () => {
+    const result = await db.users.getUsers()
 
-    setfilteredData([...filterResult])
-  }, [search])
+    setfilteredData(() => result.data.data)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const filterResult = filteredData.filter((user) => {
+    return user.name.toLowerCase().includes(search.toLowerCase())
+  })
 
   const handleChange = (e) => {
     if (!e || !e.target) return
@@ -41,8 +47,6 @@ const UsersList = () => {
           <div className="col-lg-12">
             <div className="card">
               <div className="card-body">
-                {/* <div className="row">
-                      </div> */}
                 <div className="col-md-6">
                   <h5 className="card-title">All Users</h5>
                 </div>
@@ -66,7 +70,7 @@ const UsersList = () => {
                 >
                   + Add new
                 </p>
-                <UserTable userData={filteredData} />
+                <UserTable userData={filterResult} />
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ import Contact from "../admin/contact"
 import UsersList from "../admin/users/users-list"
 import Users from "../admin/users"
 import UsersLayout from "../Layout/users-layout"
-import Attributes from "@/admin/attributes"
+import ExcelUpload from "@/admin/excel-upload"
 import AttributesDetails from "@/admin/attributes-details"
 
 const adminRoutesConfig = {
@@ -52,8 +52,8 @@ const adminRoutesConfig = {
       ],
     },
     {
-      path: "attributes",
-      element: <Attributes />,
+      path: "excel-upload",
+      element: <ExcelUpload />,
     },
     {
       path: "attributes-details",

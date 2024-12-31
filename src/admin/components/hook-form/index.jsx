@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
+import { useForm } from "react-hook-form"
+import db from "@/config/db"
+import { formatToLocalDate } from "@/config/dateConfig"
+import { validationRules } from "@/config/validationRules"
 import {
   Input,
   Label,
@@ -10,43 +13,62 @@ import {
   SelectOption,
   SelectValue,
   Button,
-} from "../form-field"
-import ErrorMessage from "../error-message"
-import { userData } from "@/admin/users/users-data"
-import { validationRules } from "@/config/validationRules"
+} from "@/admin/components/form-field"
+import ErrorMessage from "@/admin/components/error-message"
 
 const HookForm = ({ id }) => {
   const navigate = useNavigate()
   const formData = new FormData()
-  const user = userData.find((user) => user.id == id)
-  const [image, setImage] = useState(user?.image || "")
+  const [user, setUser] = useState({})
+  const [image, setImage] = useState("")
   const {
     register,
     handleSubmit,
     watch,
+    reset,
+    clearErrors,
     formState: { errors },
-  } = useForm()
-  const salary = watch("salary", id ? user.salary : 10000)
+  } = useForm({ defaultValues: user })
 
-  const imageUpload = (e) => {
-    const file = e.target.files[0]
-    const reader = new FileReader()
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        const resultData = await db.users.getUserProfile(id)
+        const fetchedData = resultData.data.data
+        fetchedData.start_date = formatToLocalDate(fetchedData.start_date)
 
-    reader.onloadend = () => {
-      setImage(reader.result.toString())
+        setUser(() => fetchedData)
+        setImage(() => fetchedData.image)
+        reset(fetchedData)
+        fetchedData.password && clearErrors("password")
+      }
     }
 
-    reader.readAsDataURL(file)
+    fetchData()
+  }, [id, reset, clearErrors])
+
+  const salary = watch("salary", id ? user?.salary : 10000)
+
+  const imageUpload = async (e) => {
+    const file = e.target.files[0]
+    formData.append("image", file)
+
+    const fileData = await db.users.imageUpload(formData)
+
+    setImage(() => import.meta.env.VITE_IMAGE_URL + fileData.data.file.path)
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     data.image = image
-    formData.append("formData", JSON.stringify(data))
-    console.log(JSON.parse(formData.get("formData")))
+    data.userId = id || 0
 
-    setTimeout(() => {
-      navigate("/admin/users")
-    }, 2000)
+    formData.append("formData", JSON.stringify(data))
+
+    const result = id
+      ? await db.users.updateUser(formData)
+      : await db.users.createUser(formData)
+
+    result.status === 200 && navigate("/admin/users")
   }
 
   return (
@@ -59,7 +81,7 @@ const HookForm = ({ id }) => {
             id="floatingName"
             placeholder="Your Name"
             name="name"
-            defaultValue={id && user.name}
+            defaultValue={id && user?.name}
             {...register("name", validationRules.name)}
           />
           <Label htmlFor="floatingName">Your Name</Label>
@@ -74,7 +96,7 @@ const HookForm = ({ id }) => {
             className={`form-control`}
             id="floatingAge"
             placeholder="Your Age"
-            defaultValue={id && user.age}
+            defaultValue={id && user?.age}
             name="age"
             {...register("age", validationRules.age)}
           />
@@ -89,7 +111,7 @@ const HookForm = ({ id }) => {
             className={`form-control`}
             id="floatingEmail"
             placeholder="Your Email"
-            defaultValue={id && user.email}
+            defaultValue={id && user?.email}
             name="email"
             {...register("email", validationRules.email)}
           />
@@ -104,9 +126,12 @@ const HookForm = ({ id }) => {
             className={`form-control`}
             id="floatingPassword"
             placeholder="Password"
-            defaultValue={id && user.password}
+            defaultValue={id && user?.password}
             name="password"
-            {...register("password", validationRules.password)}
+            disabled={user?.password}
+            {...(!user.password
+              ? register("password", validationRules.password)
+              : {})}
           />
           <Label htmlFor="floatingPassword">Password</Label>
         </div>
@@ -162,7 +187,7 @@ const HookForm = ({ id }) => {
                 name="gender"
                 id="male"
                 value="male"
-                defaultChecked={user?.gender === "male"}
+                defaultValue={id && user?.gender === "male"}
                 {...register("gender", validationRules.gender)}
               />
               <Label className="form-check-label" htmlFor="male">
@@ -176,7 +201,7 @@ const HookForm = ({ id }) => {
                 name="gender"
                 id="female"
                 value="female"
-                defaultChecked={user?.gender === "female"}
+                defaultValue={id && user?.gender === "female"}
                 {...register("gender", validationRules.gender)}
               />
               <Label className="form-check-label" htmlFor="female">
@@ -194,7 +219,7 @@ const HookForm = ({ id }) => {
             placeholder="Address"
             id="floatingTextarea"
             style={{ height: 100 }}
-            defaultValue={id && user.address}
+            defaultValue={id && user?.address}
             name="address"
             {...register("address", validationRules.address)}
           />
@@ -211,7 +236,7 @@ const HookForm = ({ id }) => {
               id="floatingCity"
               placeholder="City"
               name="city"
-              defaultValue={id && user.city}
+              defaultValue={id && user?.city}
               {...register("city", validationRules.city)}
             />
             <Label htmlFor="floatingCity">City</Label>
@@ -225,7 +250,7 @@ const HookForm = ({ id }) => {
             className={`form-select`}
             id="floatingSelect"
             aria-label="State"
-            defaultValue={id ? user.state : "select"}
+            defaultValue={id ? user?.state : "select"}
             name="state"
             {...register("state", validationRules.state)}
           >
@@ -245,7 +270,7 @@ const HookForm = ({ id }) => {
             className={`form-control`}
             id="floatingPosition"
             placeholder="Position"
-            defaultValue={id && user.position}
+            defaultValue={id && user?.position}
             name="position"
             {...register("position", validationRules.position)}
           />
@@ -262,7 +287,7 @@ const HookForm = ({ id }) => {
             className={`form-control`}
             id="floatingStartDate"
             placeholder="Start Date"
-            value={id && user.startDate}
+            defaultValue={id && user?.start_date}
             name="startDate"
             {...register("startDate", validationRules.startDate)}
           />
@@ -286,7 +311,7 @@ const HookForm = ({ id }) => {
               className="form-range"
               id="customRange1"
               name="salary"
-              defaultValue={id ? user.salary : 10000}
+              defaultValue={id ? user?.salary : 10000}
               {...register("salary", validationRules.salary)}
             />
           </div>
@@ -317,7 +342,7 @@ const HookForm = ({ id }) => {
         <Button
           type="reset"
           className="btn btn-secondary"
-          //   onClick={() => handleReset()}
+          onClick={() => reset()}
         >
           Clear
         </Button>

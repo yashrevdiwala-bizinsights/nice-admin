@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
+import db from "@/config/db"
+import { formatToLocalDate } from "@/config/dateConfig"
 
 /* eslint-disable react/prop-types */
 const UserTable = ({ userData }) => {
@@ -11,13 +13,17 @@ const UserTable = ({ userData }) => {
 
   const navigate = useNavigate()
 
-  const removeUser = (removeId) => {
-    filteredData.length !== 1 &&
-      setFilteredData(
-        filteredData.filter((data) => {
-          return data.id !== removeId
-        })
-      )
+  const removeUser = async (removeId) => {
+    if (filteredData.length !== 1) {
+      const deleteResult = await db.users.deleteUser(removeId)
+
+      const newUserData = await db.users.getUsers()
+
+      const userResult =
+        deleteResult.status === 200 ? newUserData.data.data : filteredData
+
+      setFilteredData(userResult)
+    }
   }
 
   const editUser = (userId) => {
@@ -38,23 +44,23 @@ const UserTable = ({ userData }) => {
       </thead>
       <tbody>
         {filteredData.map((user) => (
-          <tr key={user.id}>
-            <th scope="row">{user.id}</th>
+          <tr key={user.user_id}>
+            <th scope="row">{user.user_id}</th>
             <td>{user.name}</td>
             <td>{user.position}</td>
             <td>{user.age}</td>
-            <td>{user.startDate}</td>
+            <td>{formatToLocalDate(user.start_date)}</td>
             <td>
               <div className="d-flex flex-row">
                 <i
                   role="button"
                   className="bi bi-pencil-square text-dark p-2"
-                  onClick={() => editUser(user.id)}
+                  onClick={() => editUser(user.user_id)}
                 />
                 <i
                   role="button"
                   className="bi bi-trash-fill text-danger p-2"
-                  onClick={() => removeUser(user.id)}
+                  onClick={() => removeUser(user.user_id)}
                 />
               </div>
             </td>

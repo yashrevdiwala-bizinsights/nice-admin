@@ -1,19 +1,22 @@
-import AttributesForm from "./attributes-form"
+import ExcelUploadForm from "./form"
 import { Breadcrumb } from "../components/breadcrumb"
+import useDocumentTitle from "@/components/useDocumentTitle"
 
-const Attributes = () => {
+const ExcelUpload = () => {
+  useDocumentTitle("Nice Admin - Excel Upload")
+
   return (
     <main id="main" className="main">
       <div className="pagetitle">
-        <h1>Attributes</h1>
-        <Breadcrumb menu="Master" active="Attributes" />
+        <h1>Excel Upload</h1>
+        <Breadcrumb menu="Master" active="Excel Upload" />
       </div>
       <section className="section">
         <div className="col-lg-6">
           <div className="card">
             <div className="card-body">
               <h5 className="card-title" />
-              <AttributesForm />
+              <ExcelUploadForm />
             </div>
           </div>
         </div>
@@ -21,4 +24,4 @@ const Attributes = () => {
     </main>
   )
 }
-export default Attributes
+export default ExcelUpload

@@ -70,9 +70,16 @@ const Navbar = ({ activeTab }) => {
         </li>
 
         <li className="nav-item">
-          <Link className="nav-link collapsed" to="/admin/attributes">
-            <i className="bi bi-person-vcard-fill"></i>
-            <span>Attributes</span>
+          <Link
+            className={
+              activeTab === "/admin/excel-upload"
+                ? "nav-link"
+                : "nav-link collapsed"
+            }
+            to="/admin/excel-upload"
+          >
+            <i className="bi bi-file-earmark-spreadsheet-fill"></i>
+            <span>Excel Upload</span>
           </Link>
         </li>
 

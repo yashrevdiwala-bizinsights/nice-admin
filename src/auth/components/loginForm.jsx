@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router"
 import { useForm } from "react-hook-form"
 import db from "@/config/db"
+import { errorToast } from "@/config/toast"
 import { validationRules } from "@/config/validationRules"
 import { setAdminId } from "@/features/adminSlice"
 import ErrorMessage from "@/admin/components/error-message"
@@ -18,10 +19,13 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     const result = await db.admin.login(data)
+
     if (result.data.status === 200) {
       localStorage.setItem("re_d1", result.data.id)
       dispatch(setAdminId(result.data.id))
       navigate("/")
+    } else {
+      errorToast("Invalid Username or Password")
     }
   }
 
@@ -33,13 +37,10 @@ const LoginForm = () => {
             <div className="row justify-content-center">
               <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                 <div className="d-flex justify-content-center py-4">
-                  <Link
-                    to="/"
-                    className="logo d-flex align-items-center w-auto"
-                  >
+                  <div className="logo d-flex align-items-center w-auto">
                     <img src="assets/img/logo.png" alt="" />
                     <span className="d-none d-lg-block">NiceAdmin</span>
-                  </Link>
+                  </div>
                 </div>
 
                 <div className="card mb-3">
