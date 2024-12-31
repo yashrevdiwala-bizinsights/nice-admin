@@ -1,11 +1,19 @@
+import { useEffect } from "react"
 import { useSelector } from "react-redux"
-import { Navigate } from "react-router"
+import { useNavigate } from "react-router"
 
 const Home = () => {
   const { id } = useSelector((state) => state.admin)
+  const navigate = useNavigate()
 
-  const defaultRoute = id === "0" ? "/login" : "/admin"
+  useEffect(() => {
+    if (id === "0") {
+      navigate("/login")
+    } else {
+      navigate("/admin")
+    }
+  }, [id, navigate])
 
-  return <Navigate to={defaultRoute} replace />
+  return null
 }
 export default Home

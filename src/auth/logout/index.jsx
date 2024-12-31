@@ -1,12 +1,22 @@
+import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { Navigate } from "react-router"
+import { useNavigate } from "react-router"
 import { setAdminId } from "@/features/adminSlice"
 
 const Logout = () => {
   const dispatch = useDispatch()
-  dispatch(setAdminId(0))
-  localStorage.setItem("re_d1", 0)
+  const navigate = useNavigate()
 
-  return <Navigate to="/" replace />
+  useEffect(() => {
+    const performLogout = () => {
+      localStorage.setItem("re_d1", "0")
+      dispatch(setAdminId("0"))
+      navigate("/login")
+    }
+
+    performLogout()
+  }, [dispatch, navigate])
+
+  return null
 }
 export default Logout

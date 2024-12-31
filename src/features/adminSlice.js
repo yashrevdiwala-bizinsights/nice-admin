@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  id: localStorage.getItem("re_d1") || 0,
+  id: localStorage.getItem("re_d1") || "0",
 }
 
 const adminSlice = createSlice({
