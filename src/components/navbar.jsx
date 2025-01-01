@@ -84,9 +84,9 @@ const Navbar = ({ activeTab }) => {
         </li>
 
         <li className="nav-item">
-          <Link className="nav-link collapsed" to="/admin/attributes-details">
+          <Link className="nav-link collapsed" to="/admin/multiple-addition">
             <i className="bi bi-person-vcard-fill"></i>
-            <span>Attributes Details</span>
+            <span>Multiple Addition</span>
           </Link>
         </li>
 

@@ -7,7 +7,7 @@ import UsersList from "../admin/users/users-list"
 import Users from "../admin/users"
 import UsersLayout from "../Layout/users-layout"
 import ExcelUpload from "@/admin/excel-upload"
-import AttributesDetails from "@/admin/attributes-details"
+import MultipleAddition from "@/admin/multiple-addition"
 
 const adminRoutesConfig = {
   path: "/admin",
@@ -56,8 +56,8 @@ const adminRoutesConfig = {
       element: <ExcelUpload />,
     },
     {
-      path: "attributes-details",
-      element: <AttributesDetails />,
+      path: "multiple-addition",
+      element: <MultipleAddition />,
     },
   ],
 }
